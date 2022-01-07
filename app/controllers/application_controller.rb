@@ -14,7 +14,14 @@ class ApplicationController < Sinatra::Base
 
     get "/sad" do
       sad_playlist = Playlist.where(mood: 'Sad')
-      sad_playlist.to_json(only: [:mood, :rating, :url], include: {artist: { only: [:artist_name, :bio], include: { songs: { only: [:song_name]}}}})
+      sad_playlist.to_json(only: [:id, :mood, :rating, :url], include: {artist: { only: [:artist_name, :bio], include: { songs: { only: [:song_name]}}}})
+    end
+
+    get '/sad/:id' do
+      # look up the game in the database using its ID
+      playlist = Playlist.find(params[:id])
+      # send a JSON-formatted response of the game data
+      playlist.to_json
     end
   
     get "/angry" do
@@ -40,6 +47,14 @@ class ApplicationController < Sinatra::Base
     get "/seasonal" do
       seasonal_playlist = Playlist.where(mood: 'Seasonal')
       seasonal_playlist.to_json(only: [:mood, :rating, :url], include: {artist: { only: [:artist_name, :bio], include: { songs: { only: [:song_name]}}}})
+    end
+
+    patch '/sad/:id' do
+      playlist = Playlist.find(params[:id])
+      playlist.update(
+        rating: params[:rating]
+      )
+      playlist.to_json
     end
 
 end
