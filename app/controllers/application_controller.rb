@@ -18,4 +18,15 @@ class ApplicationController < Sinatra::Base
     )
     playlist.to_json
   end
+
+  post '/comments' do
+    comment = Comment.create(
+      name: params[:name],
+      message: params[:message],
+      playlist_id: params[:playlist_id],
+    )
+    review.to_json
+  end
+
+
 end
